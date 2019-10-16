@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+        <head>
+                <meta charset="utf-8">
+                <title>ESILV_DATA_VIZ_Project</title>
+        
+                <script type="text/javascript" src="js/d3.js"></script>
+                <link rel="stylesheet" href="css/style.css">
+          
+            </head>
+        
+                
+        
+        
+              <style>
+                    ul {
+                      list-style-type: none;
+                      margin: 0;
+                      padding: 0;
+                      overflow: hidden;
+                      background-color: #333;
+                    }
+                    
+                    li {
+                      float: left;
+                    }
+                    
+                    li a {
+                      display: block;
+                      color: white;
+                      text-align: center;
+                      padding: 14px 16px;
+                      text-decoration: none;
+                    }
+                    
+                    li a:hover {
+                      background-color: #111;
+                    }
+                    </style>
+        
+        
+        <ul>
+            <li><a class="active" href="index.html">Home</a></li>
+        <li><a href="ML.html">Machine Learning</a></li>
+        <li><a href="DL.html">Deep Learning</a></li>
+        <li><a href="NLP.html">NLP</a></li>
+        <li><a href="Vision.html">Computer Vision</a></li>
+        <li><a href="Recommand.html">Recommandation system</a></li>
+        <li><a href="SysExp.html">Systeme expert</a></li>
+        <li><a href="Robo.html">Robotics</a></li>
+        <li><a href="ETIQUE.html">Ethics</a></li>
+        <li><a href="Autre.html">Others</a></li>
+              </ul>
+        
+        
+      
+        <h1 align="center" >Expert System companies</h1>
+        <script type="text/javascript">
+
+            function valueCount(dataset, column){
+                var result = 0;
+                for (var i = 0; i<dataset.length; i++) {
+                    if(dataset[i][column] == 1) result++;
+                }
+                return result;
+            }
+
+
+
+
+            var toulouse=[];
+            //Load Data
+            d3.csv("data/toulouse.csv",function(toulouse){
+                dataset = {
+                    "children":toulouse
+                };
+
+                var features = ["MACHINE LEARNING", "DEEP LEARNING", "ROBOTIQUE", "SYSTEME DE RECOMMANDATION", "TRAITEMENT NATUREL DU LANGAGE", "VISION PAR ORDINATEUR", "ETHIQUE", "SYSTEME EXPERT", "AUTRE"]
+
+                var names_ml = [];
+                toulouse.forEach(function(element){
+                    if(element['SYSTEME EXPERT']==1)
+                    {
+                    value = element 
+                    names_ml.push(value)
+                    }
+                   
+                });
+console.log(names_ml)
+               var value_counts   = {
+                    "children":names_ml
+                };
+
+
+
+
+
+                
+
+                var diameter = 600;
+                var color = d3.scaleOrdinal(d3.schemeCategory20);
+
+                var bubble = d3.pack(value_counts)
+                    .size([diameter, diameter])
+                    .padding(1.5);
+
+                var svg = d3.select("body")
+                    .append("svg")
+                    .attr("width", diameter)
+                    .attr("height", diameter)
+                    .attr("class", "bubble");
+
+                var nodes = d3.hierarchy(value_counts)
+                    .sum(function(d) { return d.Num;});
+
+                var node = svg.selectAll(".node")
+                    .data(bubble(nodes).descendants())
+                    .enter()
+                    .filter(function(d){
+                        return  !d.children
+                    })
+                    .append("g")
+                    .attr("class", "node")
+                    .attr("transform", function(d) {
+                        return "translate(" + d.x + "," + d.y + ")";
+                    });
+
+                node.append("title")
+                    .text(function(d) {
+                        return d.NOM + ": " + d.Num;
+                    });
+
+                node.append("circle")
+                    .attr("r", function(d) {
+                        return d.r;
+                    })
+                    .style("fill", function(d,i) {
+                        return color(i);
+                    });
+
+                node.append("text")
+                    .attr("dy", ".2em")
+                    .style("text-anchor", "middle")
+                    .text(function(d) {
+                        return d.data.NOM.substring(0, d.r / 3);
+                    })
+                    .attr("font-family", "sans-serif")
+                    .attr("font-size", function(d){
+                        return d.r/5;
+                    })
+                    .attr("fill", "white");
+
+                node.append("text")
+                    .attr("dy", "1.3em")
+                    .style("text-anchor", "middle")
+                    .text(function(d) {
+                        return d.data.Num;
+                    })
+                    .attr("font-family",  "Gill Sans", "Gill Sans MT")
+                    .attr("font-size", function(d){
+                        return d.r/5;
+                    })
+                    .attr("fill", "white");
+
+                d3.select(self.frameElement)
+                    .style("height", diameter + "px");
+
+
+});
+    </script>
+        
+
+    </body>
+
+</html>

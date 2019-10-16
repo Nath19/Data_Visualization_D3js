@@ -1,0 +1,28 @@
+html, body {
+    margin: 0;
+    background: linear-gradient(to right, #8360c3, #2ebf91); 
+
+
+  }
+  
+.dead  { 
+  opacity: .25; 
+}
+
+.alive { 
+  opacity: 1.; 
+  fill-opacity:.01; 
+  stroke: black; 
+}
+
+.bubble {
+
+display: block;
+margin: auto;
+}
+header {
+  display: block;
+}
+
+
+
